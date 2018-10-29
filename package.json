@@ -4,8 +4,9 @@
   "description": "OAuth2 security recipes and examples based on egg with oauth2-server",
   "dependencies": {
     "egg": "2.10.0",
-    "egg-sequelize": "^4.0.2",
-    "egg-scripts": "^2.5.0"
+    "egg-oauth2-server": "^2.2.3",
+    "egg-scripts": "^2.5.0",
+    "egg-sequelize": "^4.0.2"
   },
   "devDependencies": {
     "autod": "^3.0.1",
@@ -14,6 +15,11 @@
     "egg-mock": "^3.19.2",
     "eslint": "^4.18.1",
     "eslint-config-egg": "^7.0.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-node": "^8.0.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
     "factory-girl": "^5.0.2",
     "sequelize-cli": "^4.0.0"
   },
@@ -30,7 +36,10 @@
   "ci": {
     "version": "8"
   },
-  "eslintIgnore": [ "coverage", "dist" ],
+  "eslintIgnore": [
+    "coverage",
+    "dist"
+  ],
   "repository": {
     "type": "git",
     "url": ""
