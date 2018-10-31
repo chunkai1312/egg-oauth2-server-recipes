@@ -1,16 +1,16 @@
 {
   "development": {
-    "username": "root",
-    "password": null,
-    "database": "define-your-own-databse-for-development",
+    "username": "postgres",
+    "password": "example",
+    "database": "postgres",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "postgres"
   },
   "test": {
-    "username": "root",
-    "password": null,
-    "database": "define-your-own-databse-for-unittest",
+    "username": "postgres",
+    "password": "example",
+    "database": "postgres",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "postgres"
   }
 }
