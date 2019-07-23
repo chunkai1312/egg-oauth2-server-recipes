@@ -1,17 +1,20 @@
 'use strict'
 
 module.exports = app => {
-  const { STRING, TEXT, UUID, UUIDV4 } = app.Sequelize
+  const { INTEGER, STRING, TEXT, BOOLEAN, DATE } = app.Sequelize
 
   const OauthClient = app.model.define('oauth_client', {
-    id: { type: UUID, primaryKey: true, defaultValue: UUIDV4 },
-    name: { type: STRING },
-    secret: { type: STRING },
-    redirect_uri: { type: TEXT },
-    grant_types: { type: STRING },
-    scope: { type: TEXT },
-    user_id: { type: UUID }
-  }, { tableName: 'oauth_clients', timestamps: false })
+    id: { type: INTEGER, primaryKey: true, autoIncrement: true },
+    user_id: { type: INTEGER },
+    name: { type: STRING, allowNull: false },
+    secret: { type: STRING(100), allowNull: false },
+    redirect: { type: TEXT, allowNull: false },
+    personal_access_client: { type: BOOLEAN, allowNull: false },
+    password_client: { type: BOOLEAN, allowNull: false },
+    revoked: { type: BOOLEAN, allowNull: false },
+    created_at: { type: DATE },
+    updated_at: { type: DATE }
+  }, { tableName: 'oauth_clients' })
 
   OauthClient.associate = function () {
     app.model.OauthClient.belongsTo(app.model.User, { as: 'user', foreignKey: 'user_id' })

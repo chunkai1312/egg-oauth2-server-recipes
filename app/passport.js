@@ -8,7 +8,7 @@ module.exports = app => {
     const { provider } = user
 
     if (provider === 'local') {
-      const existsUser = await ctx.model.User.findOne({ where: { username: user.username } })
+      const existsUser = await ctx.model.User.findOne({ where: { email: user.username } })
       if (!existsUser) return false
       const isAuthenticated = existsUser.authenticate(user.password)
       return isAuthenticated ? existsUser : false

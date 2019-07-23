@@ -21,7 +21,7 @@ class AuthController extends Controller {
 
   async authorize () {
     const ctx = this.ctx
-    const client = await ctx.model.OauthClient.findById(ctx.query.client_id)
+    const client = await ctx.model.OauthClient.findByPk(ctx.query.client_id)
     await ctx.render('authorize.html', {
       client: client,
       user: ctx.user,

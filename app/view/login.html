@@ -31,7 +31,7 @@ const {
   MuiThemeProvider,
   Typography,
   withStyles,
-} = window['material-ui'];
+} = MaterialUI;
 
 const theme = createMuiTheme({
   palette: {
@@ -99,8 +99,8 @@ function Login(props) {
           </Typography>
           <form method="post" action="/login" className={classes.form}>
             <FormControl margin="normal" required fullWidth>
-              <InputLabel htmlFor="username">Email Address</InputLabel>
-              <Input id="username" name="username" autoComplete="username" autoFocus />
+              <InputLabel htmlFor="email">Email Address</InputLabel>
+              <Input id="email" name="email" autoComplete="email" autoFocus />
             </FormControl>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="password">Password</InputLabel>

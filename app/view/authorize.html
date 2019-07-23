@@ -14,7 +14,6 @@
   <body>
     <div id="root"></div>
     <script type="text/babel">
-
 const {
   Avatar,
   Button,
@@ -31,8 +30,7 @@ const {
   MuiThemeProvider,
   Typography,
   withStyles,
-} = window['material-ui'];
-
+} = MaterialUI;
 const theme = createMuiTheme({
   palette: {
     primary: {
@@ -50,7 +48,6 @@ const theme = createMuiTheme({
     useNextVariants: true,
   },
 });
-
 const styles = theme => ({
   layout: {
     width: 'auto',
@@ -82,10 +79,8 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 3,
   },
 });
-
 function SignIn(props) {
   const { classes } = props;
-
   return (
     <React.Fragment>
       <CssBaseline />
@@ -98,7 +93,7 @@ function SignIn(props) {
             Authorization
           </Typography>
           <form method="get" action="/oauth/authorize/decision" className={classes.form}>
-            <p>Hi <b>{{user.username}},</b></p>
+            <p>Hi <b>{{user.name}},</b></p>
             <p>The application <b>{{client.name}}</b> is requesting access to your account.</p>
             <p>Do you approve?</p>
             <input name="response_type" type="hidden" value="{{query.response_type}}" />
@@ -134,7 +129,6 @@ function SignIn(props) {
     </React.Fragment>
   );
 }
-
 const App = withStyles(styles)(SignIn);
 ReactDOM.render(<App />, document.getElementById('root'));
     </script>

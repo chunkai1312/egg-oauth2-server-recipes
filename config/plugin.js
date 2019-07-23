@@ -31,6 +31,14 @@ exports.oAuth2Server = {
 }
 
 /**
+ * @see https://github.com/okoala/egg-jwt
+ */
+exports.jwt = {
+  enable: true,
+  package: 'egg-jwt'
+}
+
+/**
  * Passport plugin.
  *
  * @see https://github.com/eggjs/egg-passport

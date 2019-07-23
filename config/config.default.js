@@ -7,7 +7,7 @@ module.exports = appInfo => {
   config.keys = appInfo.name + '_1540806252168_764'
 
   // add your config here
-  config.middleware = []
+  config.middleware = ['errorHandler']
 
   config.security = {
     csrf: {
@@ -22,7 +22,7 @@ module.exports = appInfo => {
     port: 5432,
     database: 'postgres',
     username: 'postgres',
-    password: 'example'
+    password: 'postgres'
   }
 
   config.view = {
@@ -35,13 +35,23 @@ module.exports = appInfo => {
   config.oAuth2Server = {
     debug: true,
     grants: ['authorization_code', 'client_credentials', 'password', 'refresh_token'],
-    accessTokenLifetime: 3600,
-    refreshTokenLifetime: 1209600
+    accessTokenLifetime: 31622400,
+    refreshTokenLifetime: 31622400
+  }
+
+  /**
+   * The configuration of `egg-jwt` plugin.
+   *
+   * @member {Object} Config#jwt
+   * @see https://github.com/okoala/egg-jwt
+   */
+  config.jwt = {
+    secret: config.keys
   }
 
   config.passportLocal = {
-    // usernameField: 'username',
-    // passwordField: 'password'
+    usernameField: 'email',
+    passwordField: 'password'
   }
 
   return config

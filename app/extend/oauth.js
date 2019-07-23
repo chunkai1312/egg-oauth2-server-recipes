@@ -10,7 +10,8 @@ module.exports = () => {
   class Model {
     constructor (ctx) {
       this.ctx = ctx
-      this.app = this.ctx.app
+      this.app = ctx.app
+      this.config = ctx.app.config
     }
 
     /**
@@ -69,18 +70,18 @@ module.exports = () => {
      * @returns {Object} token.user - The user associated with the access token.
      */
     async getAccessToken (accessToken) {
-      const token = await this.ctx.model.OauthAccessToken.findOne({
-        where: { access_token: accessToken }
-      })
-      if (!token) return false
-      const client = await token.getClient()
-      const user = await token.getUser()
+      const oauthAccessToken = await this.ctx.model.OauthAccessToken.findByPk(accessToken)
+      if (!oauthAccessToken) return false
+
+      const client = await this.ctx.model.OauthClient.findByPk(oauthAccessToken.client_id)
+      const user = await this.ctx.model.User.findByPk(oauthAccessToken.user_id)
+
       return {
-        accessToken: token.access_token,
-        accessTokenExpiresAt: token.expires_at,
-        scope: token.scope,
-        client: client,
-        user: user
+        accessToken: oauthAccessToken.id,
+        accessTokenExpiresAt: oauthAccessToken.expires_at,
+        scope: oauthAccessToken.scope,
+        client: client.toJSON(),
+        user: user.toJSON()
       }
     }
 
@@ -99,18 +100,21 @@ module.exports = () => {
      * @returns {Object} token.user - The user associated with the refresh token.
      */
     async getRefreshToken (refreshToken) {
-      const token = await this.ctx.model.OauthRefreshToken.findOne({
-        where: { refresh_token: refreshToken }
-      })
-      if (!token) return false
-      const client = await token.getClient()
-      const user = await token.getUser()
+      const oauthRefreshToken = await this.ctx.model.OauthRefreshToken.findByPk(refreshToken)
+      if (!oauthRefreshToken || oauthRefreshToken.revoked) return false
+
+      const oauthAccessToken = await this.ctx.model.OauthAccessToken.findByPk(oauthRefreshToken.access_token_id)
+      if (!oauthAccessToken) return false
+
+      const client = await this.ctx.model.OauthClient.findByPk(oauthAccessToken.client_id)
+      const user = await this.ctx.model.User.findByPk(oauthAccessToken.user_id)
+
       return {
-        refreshToken: token.refresh_token,
-        refreshTokenExpiresAt: token.expires_at,
-        scope: token.scope,
-        client: client,
-        user: user
+        refreshToken: oauthRefreshToken.id,
+        refreshTokenExpiresAt: oauthRefreshToken.expires_at,
+        scope: oauthAccessToken.scope,
+        client: client.toJSON(),
+        user: user.toJSON()
       }
     }
 
@@ -130,19 +134,19 @@ module.exports = () => {
      * @returns {Object} code.user - The user associated with the authorization code.
      */
     async getAuthorizationCode (authorizationCode) {
-      const code = await this.ctx.model.OauthAuthorizationCode.findOne({
-        where: { authorization_code: authorizationCode }
-      })
-      if (!code) return false
-      const client = await code.getClient()
-      const user = await code.getUser()
+      const oauthAuthCode = await this.ctx.model.OauthAuthCode.findByPk(authorizationCode)
+      if (!oauthAuthCode || oauthAuthCode.revoked) return false
+
+      const client = await this.ctx.model.OauthClient.findByPk(oauthAuthCode.client_id)
+      const user = await this.ctx.model.User.findByPk(oauthAuthCode.user_id)
+
       return {
-        code: code.authorization_code,
-        expiresAt: code.expires_at,
-        redirectUri: code.redirect_uri,
-        scope: code.scope,
-        client: client,
-        user: user
+        code: oauthAuthCode.id,
+        expiresAt: oauthAuthCode.expires_at,
+        redirectUri: client.redirect,
+        scope: oauthAuthCode.scopes,
+        client: client.toJSON(),
+        user: user.toJSON()
       }
     }
 
@@ -165,10 +169,11 @@ module.exports = () => {
       if (clientSecret) options.where.secret = clientSecret
       const client = await this.ctx.model.OauthClient.findOne(options)
       if (!client) return false
+
       return {
         id: client.id,
-        redirectUris: client.redirect_uri.split(','),
-        grants: client.grant_types.split(',')
+        redirectUris: client.redirect.split(','),
+        grants: this.config.oAuth2Server.grants
       }
     }
 
@@ -181,11 +186,13 @@ module.exports = () => {
      * @param {String} password - The user’s password.
      */
     async getUser (username, password) {
+      // for aythentication grant
       if (this.ctx.user) {
-        const user = await this.ctx.model.User.findById(this.ctx.user.id)
+        const user = await this.ctx.model.User.findByPk(this.ctx.user.id)
         return user.toJSON()
       }
-      const user = await this.ctx.model.User.findOne({ where: { username } })
+
+      const user = await this.ctx.model.User.findOne({ where: { email: username } })
       if (!user) return false
       const isAuthenticated = user.authenticate(password)
       if (!isAuthenticated) return false
@@ -203,9 +210,12 @@ module.exports = () => {
      *                   The user object is completely transparent to oauth2-server and is simply used as input to other model functions.
      */
     async getUserFromClient (client) {
-      const oauthClient = await this.ctx.model.OauthClient.findById(client.id)
-      if (!oauthClient) return false
-      const user = await oauthClient.getUser()
+      const oauthClient = await this.ctx.model.OauthClient.findByPk(client.id)
+      if (!oauthClient || !oauthClient.user_id) return false
+
+      const user = await this.ctx.model.User.findByPk(oauthClient.user_id)
+      if (!user) return false
+
       return user.toJSON()
     }
 
@@ -233,22 +243,44 @@ module.exports = () => {
      * @returns {Object} token.user - The user associated with the access token.
      */
     async saveToken (token, client, user) {
-      await Promise.all([
-        this.ctx.model.OauthAccessToken.create({
-          access_token: token.accessToken,
-          expires_at: token.accessTokenExpiresAt,
-          client_id: client.id,
-          user_id: user.id,
-          scope: token.scope
-        }),
-        this.ctx.model.OauthRefreshToken.create({
-          refresh_token: token.refreshToken,
-          expires_at: token.refreshTokenExpiresAt,
-          client_id: client.id,
-          user_id: user.id,
-          scope: token.scope
+      // const accessToken = this.app.jwt.sign({
+      //   jti: token.accessToken,
+      //   sub: user.id,
+      //   aud: client.id,
+      //   iat: token.accessTokenExpiresAt - this.config.oAuth2Server.accessTokenLifetime,
+      //   nbf: token.accessTokenExpiresAt - this.config.oAuth2Server.accessTokenLifetime,
+      //   exp: new Date(token.accessTokenExpiresAt).getTime() / 1000,
+      //   scopes: token.scope
+      // }, this.config.jwt.secret)
+
+      // const refreshToken = this.app.jwt.sign({
+      //   jti: token.accessToken,
+      //   sub: user.id,
+      //   aud: client.id,
+      //   iat: token.refreshTokenExpiresAt - this.config.oAuth2Server.refreshTokenLifetime,
+      //   nbf: token.refreshTokenExpiresAt - this.config.oAuth2Server.refreshTokenLifetime,
+      //   exp: new Date(token.refreshTokenExpiresAt).getTime() / 1000,
+      //   scopes: token.scope
+      // }, this.config.jwt.secret)
+
+      const OauthAccessToken = await this.ctx.model.OauthAccessToken.create({
+        id: token.accessToken,
+        user_id: user.id,
+        client_id: client.id,
+        scope: token.scope,
+        revoked: false,
+        expires_at: token.accessTokenExpiresAt
+      })
+
+      if (token.refreshToken) {
+        await this.ctx.model.OauthRefreshToken.create({
+          id: token.refreshToken,
+          access_token_id: OauthAccessToken.id,
+          revoked: false,
+          expires_at: token.refreshTokenExpiresAt
         })
-      ])
+      }
+
       return {
         accessToken: token.accessToken,
         accessTokenExpiresAt: token.accessTokenExpiresAt,
@@ -282,14 +314,15 @@ module.exports = () => {
      * @returns {Object} code.user - The user associated with the authorization code.
      */
     async saveAuthorizationCode (code, client, user) {
-      await this.ctx.model.OauthAuthorizationCode.create({
-        authorization_code: code.authorizationCode,
-        expires_at: code.expiresAt,
-        redirect_uri: code.redirectUri,
-        scope: code.scope,
+      await this.ctx.model.OauthAuthCode.create({
+        id: code.authorizationCode,
+        user_id: user.id,
         client_id: client.id,
-        user_id: user.id
+        scopes: code.scope,
+        revoked: false,
+        expires_at: code.expiresAt
       })
+
       return {
         authorizationCode: code.authorizationCode,
         expiresAt: code.expiresAt,
@@ -315,10 +348,13 @@ module.exports = () => {
      * @returns {Boolean} Return `true` if the revocation was successful or `false` if the refresh token could not be found.
      */
     async revokeToken (token) {
-      const result = await this.ctx.model.OauthRefreshToken.destroy({
-        where: { refresh_token: token.refreshToken }
-      })
-      return result
+      const oauthRefreshToken = await this.ctx.model.OauthRefreshToken.findByPk(token.refreshToken)
+      if (!oauthRefreshToken) return false
+
+      oauthRefreshToken.revoked = true
+      await oauthRefreshToken.save()
+
+      return true
     }
 
     /**
@@ -337,10 +373,13 @@ module.exports = () => {
      * @returns {Boolean} Return `true` if the revocation was successful or `false` if the authorization code could not be found.
      */
     async revokeAuthorizationCode (code) {
-      const result = await this.ctx.model.OauthAuthorizationCode.destroy({
-        where: { authorization_code: code.code }
-      })
-      return result
+      const oauthAuthCode = await this.ctx.model.OauthAuthCode.findByPk(code.code)
+      if (!oauthAuthCode) return false
+
+      oauthAuthCode.revoked = true
+      await oauthAuthCode.save()
+
+      return true
     }
 
     /**

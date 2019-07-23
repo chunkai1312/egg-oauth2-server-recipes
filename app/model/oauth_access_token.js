@@ -1,16 +1,19 @@
 'use strict'
 
 module.exports = app => {
-  const { INTEGER, STRING, TEXT, DATE, UUID } = app.Sequelize
+  const { INTEGER, STRING, TEXT, BOOLEAN, DATE } = app.Sequelize
 
   const OauthAccessToken = app.model.define('oauth_access_token', {
-    id: { type: INTEGER, primaryKey: true, autoIncrement: true },
-    access_token: { type: STRING },
-    expires_at: { type: DATE },
-    scope: { type: TEXT },
-    client_id: { type: UUID },
-    user_id: { type: UUID }
-  }, { tableName: 'oauth_access_tokens', timestamps: false })
+    id: { type: STRING(100), primaryKey: true },
+    user_id: { type: INTEGER },
+    client_id: { type: INTEGER.UNSIGNED, allowNull: false },
+    name: { type: STRING },
+    scopes: { type: TEXT },
+    revoked: { type: BOOLEAN, allowNull: false },
+    created_at: { type: DATE },
+    updated_at: { type: DATE },
+    expires_at: { type: DATE }
+  }, { tableName: 'oauth_access_tokens' })
 
   OauthAccessToken.associate = function () {
     app.model.OauthAccessToken.belongsTo(app.model.User, { as: 'user', foreignKey: 'user_id' })
