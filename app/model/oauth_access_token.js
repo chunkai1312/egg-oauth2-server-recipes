@@ -6,7 +6,7 @@ module.exports = app => {
   const OauthAccessToken = app.model.define('oauth_access_token', {
     id: { type: STRING(100), primaryKey: true },
     user_id: { type: INTEGER },
-    client_id: { type: INTEGER.UNSIGNED, allowNull: false },
+    client_id: { type: INTEGER, allowNull: false },
     name: { type: STRING },
     scopes: { type: TEXT },
     revoked: { type: BOOLEAN, allowNull: false },

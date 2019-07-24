@@ -1,5 +1,7 @@
 'use strict'
 
+const ms = require('ms')
+
 /**
  * @param {Egg.Application} app - egg application
  */
@@ -9,9 +11,24 @@ module.exports = app => {
 
     if (provider === 'local') {
       const existsUser = await ctx.model.User.findOne({ where: { email: user.username } })
-      if (!existsUser) return false
+
+      if (!existsUser) {
+        ctx.flash('error', 'Unknown User')
+        return null
+      }
+
       const isAuthenticated = existsUser.authenticate(user.password)
-      return isAuthenticated ? existsUser : false
+
+      if (!isAuthenticated) {
+        ctx.flash('error', 'Unknown Password')
+        return null
+      }
+
+      if (ctx.request.body.remember_me) {
+        ctx.session.maxAge = ms('30d')
+      }
+
+      return existsUser
     }
 
     return user

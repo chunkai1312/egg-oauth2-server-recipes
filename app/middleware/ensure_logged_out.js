@@ -1,5 +1,3 @@
 'use strict'
 
-const { ensureLoggedOut } = require('koa2-ensure-login')
-
-module.exports = ensureLoggedOut
+module.exports = require('koa2-ensure-login').ensureLoggedOut

@@ -5,7 +5,7 @@ module.exports = app => {
 
   const OauthScope = app.model.define('oauth_personal_access_client', {
     id: { type: INTEGER, primaryKey: true, autoIncrement: true },
-    client_id: { type: INTEGER.UNSIGNED, allowNull: false },
+    client_id: { type: INTEGER, allowNull: false },
     created_at: { type: DATE },
     updated_at: { type: DATE }
   }, { tableName: 'oauth_personal_access_clients' })

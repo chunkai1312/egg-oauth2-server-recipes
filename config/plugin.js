@@ -11,6 +11,14 @@ exports.sequelize = {
 }
 
 /**
+ * @see https://github.com/eggjs/egg-view-assets
+ */
+exports.assets = {
+  enable: true,
+  package: 'egg-view-assets'
+}
+
+/**
  * Nunjucks view plugin.
  *
  * @see https://github.com/eggjs/egg-view-nunjucks
