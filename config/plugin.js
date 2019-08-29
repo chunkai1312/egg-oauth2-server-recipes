@@ -1,6 +1,14 @@
 'use strict'
 
 /**
+ * @see https://github.com/eggjs/egg-validate
+ */
+exports.validate = {
+  enable: true,
+  package: 'egg-validate'
+}
+
+/**
  * Sequelize plugin.
  *
  * @see https://github.com/eggjs/egg-sequelize
@@ -29,6 +37,16 @@ exports.nunjucks = {
 }
 
 /**
+ * Flash messages plugin.
+ *
+ * @see https://github.com/chunkai1312/egg-flash
+ */
+exports.flash = {
+  enable: true,
+  package: 'egg-flash'
+}
+
+/**
  * OAuth2 server plugin.
  *
  * @see https://github.com/Azard/egg-oauth2-server
@@ -54,14 +72,4 @@ exports.jwt = {
 exports.passport = {
   enable: true,
   package: 'egg-passport'
-}
-
-/**
- * Local passport plugin.
- *
- * @see https://github.com/eggjs/egg-passport-local
- */
-exports.passportLocal = {
-  enable: true,
-  package: 'egg-passport-local'
 }

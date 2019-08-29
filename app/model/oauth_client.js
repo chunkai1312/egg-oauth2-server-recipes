@@ -14,10 +14,19 @@ module.exports = app => {
     revoked: { type: BOOLEAN, allowNull: false },
     created_at: { type: DATE },
     updated_at: { type: DATE }
-  }, { tableName: 'oauth_clients' })
+  }, {
+    tableName: 'oauth_clients',
+    timestamps: true,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at'
+  })
 
   OauthClient.associate = function () {
     app.model.OauthClient.belongsTo(app.model.User, { as: 'user', foreignKey: 'user_id' })
+  }
+
+  OauthClient.findByUserId = function (id) {
+    return this.findAll({ where: { user_id: id } })
   }
 
   return OauthClient

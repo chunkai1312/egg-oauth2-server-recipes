@@ -13,7 +13,12 @@ module.exports = app => {
     created_at: { type: DATE },
     updated_at: { type: DATE },
     expires_at: { type: DATE }
-  }, { tableName: 'oauth_access_tokens' })
+  }, {
+    tableName: 'oauth_access_tokens',
+    timestamps: true,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at'
+  })
 
   OauthAccessToken.associate = function () {
     app.model.OauthAccessToken.belongsTo(app.model.User, { as: 'user', foreignKey: 'user_id' })

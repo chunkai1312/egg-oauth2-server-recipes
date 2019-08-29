@@ -33,7 +33,7 @@ module.exports = appInfo => {
    * @member {Array} Config#middleware
    * @see https://eggjs.org/en/basics/middleware.html
    */
-  config.middleware = ['flash']
+  config.middleware = []
 
   /**
    * The configuration of `egg-security` plugin.
@@ -42,7 +42,17 @@ module.exports = appInfo => {
    * @see https://github.com/eggjs/egg-security
    */
   config.security = {
-    csrf: false
+    // csrf: false
+  }
+
+  /**
+   * The configuration of `egg-i18n` plugin.
+   *
+   * @member {Object} Config#i18n
+   * @see https://github.com/eggjs/egg-i18n
+   */
+  config.i18n = {
+    // defaultLocale: 'zh-TW'
   }
 
   /**
@@ -66,20 +76,20 @@ module.exports = appInfo => {
    * @member {Object} Config#view
    * @see https://github.com/eggjs/egg-view
    */
-  // config.view = {
-  //   defaultViewEngine: 'nunjucks',
-  //   defaultExtension: '.html',
-  //   mapping: {
-  //     '.html': 'nunjucks'
-  //   }
-  // }
-
   config.view = {
-    root: process.cwd() + 'app/assets/pages',
+    defaultViewEngine: 'nunjucks',
+    defaultExtension: '.html',
     mapping: {
-      '.js': 'assets'
+      '.html': 'nunjucks'
     }
   }
+
+  // config.view = {
+  //   root: process.cwd() + 'app/assets/pages',
+  //   mapping: {
+  //     '.js': 'assets'
+  //   }
+  // }
 
   /**
    * The configuration of `egg-oauth2-server` plugin.
@@ -113,6 +123,23 @@ module.exports = appInfo => {
   config.passportLocal = {
     usernameField: 'email',
     passwordField: 'password'
+  }
+
+  /**
+   * The configuration used for mailer service via `nodemailer`.
+   *
+   * @member {Object} Config#mailer
+   * @see https://github.com/nodemailer/nodemailer
+   */
+  config.mail = {
+    service: process.env.MAIL_SERVICE,
+    auth: {
+      user: process.env.MAIL_USERNAME,
+      pass: process.env.MAIL_PASSWORD
+    },
+    defaults: {
+      from: `${process.env.MAIL_FROM_NAME} <${process.env.MAIL_FROM_ADDRESS}>`
+    }
   }
 
   return config

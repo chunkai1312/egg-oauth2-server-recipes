@@ -1,0 +1,48 @@
+{% extends "../../layouts/app.html" %}
+
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header">{{ __('Reset Password') }}</div>
+
+        <div class="card-body">
+          {% if messages.status %}
+          <div class="alert alert-success" role="alert">
+            {{ messages.status }}
+          </div>
+          {% endif %}
+
+          <form method="POST" action="/password/email">
+            <input type="hidden" name="_csrf" value="{{ ctx.csrf }}">
+
+            <div class="form-group row">
+              <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
+
+              <div class="col-md-6">
+                <input id="email" type="email" class="form-control {% if messages['errors.email'] %} is-invalid {% endif %}" name="email"
+                  value="{{ messages.email }}" required autocomplete="email" autofocus>
+
+                {% if messages['errors.email'] %}
+                <span class="invalid-feedback" role="alert">
+                  <strong>{{ messages['errors.email'] }}</strong>
+                </span>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="form-group row mb-0">
+              <div class="col-md-6 offset-md-4">
+                <button type="submit" class="btn btn-primary">
+                  {{ __('Send Password Reset Link') }}
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

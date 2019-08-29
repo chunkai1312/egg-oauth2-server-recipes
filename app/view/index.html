@@ -17,7 +17,10 @@
 <body>
   <div id="root"></div>
   {{ helper.assets.getContext(__context__) | safe }}
-  {{ helper.assets.getScript() | safe }}
+  {% if ctx.app.config.env === 'local' -%}
+  {{ helper.assets.getScript('umi.dll.js') | safe }}
+  {%- endif %}
+  {{ helper.assets.getScript('umi.js') | safe }}
 </body>
 
 </html>

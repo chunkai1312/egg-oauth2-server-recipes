@@ -8,7 +8,10 @@ module.exports = app => {
     access_token_id: { type: STRING(100), allowNull: false },
     revoked: { type: BOOLEAN, allowNull: false },
     expires_at: { type: DATE }
-  }, { tableName: 'oauth_refresh_tokens', timestamps: false })
+  }, {
+    tableName: 'oauth_refresh_tokens',
+    timestamps: false
+  })
 
   OauthRefreshToken.associate = function () {
     app.model.OauthRefreshToken.belongsTo(app.model.OauthAccessToken, { as: 'accessToken', foreignKey: 'access_token_id' })

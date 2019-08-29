@@ -14,10 +14,27 @@ module.exports = app => {
     remember_token: { type: STRING(100) },
     created_at: { type: DATE },
     updated_at: { type: DATE }
-  }, { tableName: 'users' })
+  }, {
+    tableName: 'users',
+    timestamps: true,
+    createdAt: 'created_at',
+    updatedAt: 'updated_at'
+  })
 
-  User.prototype.authenticate = function (password, hashedPassword) {
+  User.findByEmail = function (email) {
+    return this.findOne({ where: { email } })
+  }
+
+  User.prototype.authenticate = function (password) {
     return bcrypt.compareSync(password, this.get('password'))
+  }
+
+  User.prototype.hasVerifiedEmail = function () {
+    return !!this.get('email_verified_at')
+  }
+
+  User.prototype.markEmailAsVerified = function () {
+    return this.set('email_verified_at', Date.now()).save()
   }
 
   User.prototype.toJSON = function () {

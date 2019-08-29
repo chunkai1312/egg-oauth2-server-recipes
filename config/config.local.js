@@ -22,7 +22,7 @@ module.exports = appInfo => {
      *
      * @member {String} Config#keys
      */
-    keys: process.env.APP_KEY || appInfo.name + '_1540806252168_764',
+    keys: process.env.APP_KEY || appInfo.name + '_1565359379527_3245',
 
     /**
      * The base URL of the application.
@@ -39,14 +39,15 @@ module.exports = appInfo => {
    * @see https://github.com/eggjs/egg-view-assets
    */
   config.assets = {
-    templatePath: process.cwd() + '/app/view/index.html',
-    templateViewEngine: 'nunjucks',
+    // templatePath: process.cwd() + '/app/view/index.html',
+    // templateViewEngine: 'nunjucks',
     devServer: {
       debug: true,
       autoPort: true,
-      command: 'cross-env PORT={port} roadhog dev',
+      command: 'cross-env umi dev --port={port}',
+      // portPath: process.cwd() + '/app/run/assetsPort',
       env: {
-        APP_ROOT: process.cwd() + '/app/assets',
+        APP_ROOT: process.cwd() + '/app/assets/js',
         BROWSER: 'none',
         ESLINT: 'none',
         SOCKET_SERVER: 'http://127.0.0.1:{port}'

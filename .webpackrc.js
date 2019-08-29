@@ -1,20 +1,9 @@
 'use strict'
 
-const glob = require('glob')
 const { name, version } = require('./package.json')
 
-const findEntries = (path) => {
-  const entries = glob.sync(`${path}/**/index.js`)
-
-  return entries.reduce((entries, entry) => {
-    const name = entry.replace(path + '/', '').replace('.js', '')
-    entries[name] = entry
-    return entries
-  }, {})
-}
-
 module.exports = {
-  "entry": findEntries('./app/assets/pages'),
+  "entry": "./app/assets/js/app.js",
   "env": {
     "development": {}
   },

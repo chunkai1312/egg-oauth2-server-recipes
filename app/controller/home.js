@@ -3,13 +3,22 @@
 const Controller = require('egg').Controller
 
 class HomeController extends Controller {
+
   async index () {
-    await this.ctx.render('home/index.js')
+    const ctx = this.ctx
+    await ctx.render('home')
   }
 
-  async home () {
-    await this.ctx.render('home.html')
+  async welcome () {
+    const ctx = this.ctx
+    await ctx.render('welcome')
   }
+
+  async admin () {
+    const ctx = this.ctx
+    await ctx.render('index')
+  }
+
 }
 
 module.exports = HomeController
