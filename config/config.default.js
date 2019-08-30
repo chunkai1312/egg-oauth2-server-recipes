@@ -78,18 +78,10 @@ module.exports = appInfo => {
    */
   config.view = {
     defaultViewEngine: 'nunjucks',
-    defaultExtension: '.html',
     mapping: {
       '.html': 'nunjucks'
     }
   }
-
-  // config.view = {
-  //   root: process.cwd() + 'app/assets/pages',
-  //   mapping: {
-  //     '.js': 'assets'
-  //   }
-  // }
 
   /**
    * The configuration of `egg-oauth2-server` plugin.
@@ -112,17 +104,6 @@ module.exports = appInfo => {
    */
   config.jwt = {
     secret: config.keys
-  }
-
-  /**
-   * The configuration of `egg-passport-local` plugin.
-   *
-   * @member {Object} Config#passportLocal
-   * @see https://github.com/eggjs/egg-passport-local
-   */
-  config.passportLocal = {
-    usernameField: 'email',
-    passwordField: 'password'
   }
 
   /**

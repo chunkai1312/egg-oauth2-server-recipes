@@ -39,19 +39,10 @@ module.exports = appInfo => {
    * @see https://github.com/eggjs/egg-view-assets
    */
   config.assets = {
-    // templatePath: process.cwd() + '/app/view/index.html',
-    // templateViewEngine: 'nunjucks',
     devServer: {
       debug: true,
-      autoPort: true,
-      command: 'cross-env umi dev --port={port}',
-      // portPath: process.cwd() + '/app/run/assetsPort',
-      env: {
-        APP_ROOT: process.cwd() + '/app/assets/js',
-        BROWSER: 'none',
-        ESLINT: 'none',
-        SOCKET_SERVER: 'http://127.0.0.1:{port}'
-      }
+      port: 3000,
+      command: 'webpack --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js'
     }
   }
 
