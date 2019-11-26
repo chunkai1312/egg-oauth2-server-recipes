@@ -1,3 +1,3 @@
-'use strict'
+'use strict';
 
-module.exports = require('koa2-ensure-login').ensureLoggedIn
+module.exports = require('koa2-ensure-login').ensureLoggedIn;

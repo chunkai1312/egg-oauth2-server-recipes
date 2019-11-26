@@ -1,12 +1,3 @@
 {
-  "extends": "standard",
-  "env": {
-    "node": true,
-    "mocha": true
-  },
-  "rules": {
-    "padded-blocks": 0,
-    "no-return-await": 0,
-    "array-bracket-spacing": 0
-  }
+  "extends": "eslint-config-egg"
 }

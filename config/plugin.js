@@ -1,75 +1,72 @@
-'use strict'
+'use strict';
 
-/**
- * @see https://github.com/eggjs/egg-validate
- */
-exports.validate = {
-  enable: true,
-  package: 'egg-validate'
-}
+/** @type Egg.EggPlugin */
+module.exports = {
+  // enable plugins
 
-/**
- * Sequelize plugin.
- *
- * @see https://github.com/eggjs/egg-sequelize
- */
-exports.sequelize = {
-  enable: true,
-  package: 'egg-sequelize'
-}
+  /**
+   * validate plugin
+   * @member {Function} Plugin#validate
+   * @property {Boolean} enable
+   * @see https://github.com/eggjs/egg-validate
+   */
+  validate: {
+    enable: true,
+    package: 'egg-validate',
+  },
 
-/**
- * @see https://github.com/eggjs/egg-view-assets
- */
-exports.assets = {
-  enable: true,
-  package: 'egg-view-assets'
-}
+  /**
+   * nunjucks view plugin
+   * @member {Function} Plugin#nunjucks
+   * @property {Boolean} enable
+   * @see https://github.com/eggjs/egg-view-nunjucks
+   */
+  nunjucks: {
+    enable: true,
+    package: 'egg-view-nunjucks',
+  },
 
-/**
- * Nunjucks view plugin.
- *
- * @see https://github.com/eggjs/egg-view-nunjucks
- */
-exports.nunjucks = {
-  enable: true,
-  package: 'egg-view-nunjucks'
-}
+  /**
+   * sequelize plugin
+   * @member {Function} Plugin#sequelize
+   * @property {Boolean} enable
+   * @see https://github.com/eggjs/egg-sequelize
+   */
+  sequelize: {
+    enable: true,
+    package: 'egg-sequelize',
+  },
 
-/**
- * Flash messages plugin.
- *
- * @see https://github.com/chunkai1312/egg-flash
- */
-exports.flash = {
-  enable: true,
-  package: 'egg-flash'
-}
+  /**
+   * passport plugin
+   * @member {Function} Plugin#passport
+   * @property {Boolean} enable
+   * @see https://github.com/eggjs/egg-passport
+   */
+  passport: {
+    enable: true,
+    package: 'egg-passport',
+  },
 
-/**
- * OAuth2 server plugin.
- *
- * @see https://github.com/Azard/egg-oauth2-server
- */
-exports.oAuth2Server = {
-  enable: true,
-  package: 'egg-oauth2-server'
-}
+  /**
+   * flash messages plugin.
+   * @member {Function} Plugin#flash
+   * @property {Boolean} enable
+   * @see https://github.com/chunkai1312/egg-flash
+   */
+  flash: {
+    enable: true,
+    package: 'egg-flash',
+  },
 
-/**
- * @see https://github.com/okoala/egg-jwt
- */
-exports.jwt = {
-  enable: true,
-  package: 'egg-jwt'
-}
-
-/**
- * Passport plugin.
- *
- * @see https://github.com/eggjs/egg-passport
- */
-exports.passport = {
-  enable: true,
-  package: 'egg-passport'
-}
+  /**
+   * OAuth2 server plugin.
+   * @member {Function} Plugin#oAuth2Server
+   * @property {Boolean} enable
+   * @see https://github.com/Azard/egg-oauth2-server
+   */
+  oAuth2Server: {
+    enable: true,
+    package: 'egg-oauth2-server',
+  },
+};

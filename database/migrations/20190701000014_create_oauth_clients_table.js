@@ -1,8 +1,8 @@
-'use strict'
+'use strict';
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    const { INTEGER, STRING, TEXT, BOOLEAN, DATE } = Sequelize
+    const { INTEGER, STRING, TEXT, BOOLEAN, DATE } = Sequelize;
 
     await queryInterface.createTable('oauth_clients', {
       id: { type: INTEGER, primaryKey: true, autoIncrement: true },
@@ -14,11 +14,12 @@ module.exports = {
       password_client: { type: BOOLEAN, allowNull: false },
       revoked: { type: BOOLEAN, allowNull: false },
       created_at: { type: DATE },
-      updated_at: { type: DATE }
-    })
+      updated_at: { type: DATE },
+    });
   },
 
+  // eslint-disable-next-line no-unused-vars
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('oauth_clients')
-  }
-}
+    await queryInterface.dropTable('oauth_clients');
+  },
+};

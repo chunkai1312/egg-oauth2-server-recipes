@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 module.exports = {
   'auth.failed': '使用者名稱或密碼錯誤',
@@ -100,5 +100,5 @@ module.exports = {
   'validation.uploaded': '{attribute} 上傳失敗。',
   'validation.url': '{attribute} 的格式錯誤。',
   'validation.uuid': '{attribute} 必須是有效的 UUID。',
-  'validation.custom.attribute-name.rule-name': 'custom-message'
-}
+  'validation.custom.attribute-name.rule-name': 'custom-message',
+};

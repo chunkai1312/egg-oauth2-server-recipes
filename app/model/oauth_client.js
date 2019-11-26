@@ -1,7 +1,7 @@
-'use strict'
+'use strict';
 
 module.exports = app => {
-  const { INTEGER, STRING, TEXT, BOOLEAN, DATE } = app.Sequelize
+  const { INTEGER, STRING, TEXT, BOOLEAN, DATE } = app.Sequelize;
 
   const OauthClient = app.model.define('oauth_client', {
     id: { type: INTEGER, primaryKey: true, autoIncrement: true },
@@ -13,21 +13,21 @@ module.exports = app => {
     password_client: { type: BOOLEAN, allowNull: false },
     revoked: { type: BOOLEAN, allowNull: false },
     created_at: { type: DATE },
-    updated_at: { type: DATE }
+    updated_at: { type: DATE },
   }, {
     tableName: 'oauth_clients',
     timestamps: true,
     createdAt: 'created_at',
-    updatedAt: 'updated_at'
-  })
+    updatedAt: 'updated_at',
+  });
 
-  OauthClient.associate = function () {
-    app.model.OauthClient.belongsTo(app.model.User, { as: 'user', foreignKey: 'user_id' })
-  }
+  OauthClient.associate = function() {
+    app.model.OauthClient.belongsTo(app.model.User, { as: 'user', foreignKey: 'user_id' });
+  };
 
-  OauthClient.findByUserId = function (id) {
-    return this.findAll({ where: { user_id: id } })
-  }
+  OauthClient.findByUserId = function(id) {
+    return this.findAll({ where: { user_id: id } });
+  };
 
-  return OauthClient
-}
+  return OauthClient;
+};

@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 module.exports = {
   'auth.failed': 'These credentials do not match our records.',
@@ -100,5 +100,5 @@ module.exports = {
   'validation.uploaded': 'The {attribute} failed to upload.',
   'validation.url': 'The {attribute} format is invalid.',
   'validation.uuid': 'The {attribute} must be a valid UUID.',
-  'validation.custom.attribute-name.rule-name': 'custom-message'
-}
+  'validation.custom.attribute-name.rule-name': 'custom-message',
+};
